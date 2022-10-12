@@ -68,9 +68,13 @@ class Top250Movies extends StatefulWidget {
 
 class _Top250MoviesState extends State<Top250Movies> {
 
+  // MARK: - Properties
+
   final dependencies = Context();
 
   List<Top250Movie> movies = [];
+
+  // MARK: - Lifecycle
   
   @override
   void initState() {
@@ -80,14 +84,44 @@ class _Top250MoviesState extends State<Top250Movies> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index) {
-      final movie = movies[index];
-
-      return ListTile(
-        title: Text(movie.title),
-        subtitle: Text(movie.year),
+    if (movies.isEmpty) {
+      return const Center(
+        child: Text('Loading...'),
       );
-    });
+    } else {
+      return ListView.builder(
+          itemBuilder: (context, index) {
+            final movie = movies[index];
+
+            return makeListItem(movie);
+          },
+      );
+    }
+  }
+
+  Widget makeListItem(Top250Movie movie) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            const Text("Title: "),
+            Text(movie.title),
+          ]),
+          const SizedBox(height: 4),
+          Row(children: [
+            const Text("Year: "),
+            Text(movie.year),
+          ]),
+          const SizedBox(height: 4),
+          Row(children: [
+            const Text("Rating: "),
+            Text(movie.imDbRating),
+          ]),
+        ],
+      ),
+    );
   }
   
   // MARK: - Methods
